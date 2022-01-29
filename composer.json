@@ -1,0 +1,22 @@
+{
+  "name": "cti-digital/inventory-import",
+  "version": "1.0.0",
+  "description": "Simple inventory stock import",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "magento/module-catalog": "104.0.*",
+    "magento/module-config": "101.2.*"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "CtiDigital\\InventoryImport\\": ""
+    }
+  }
+}
