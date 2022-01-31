@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="CtiDigital_InventoryImport::cti_digital_inventory_import"
+             sortOrder="100" title="Import Management"
+             module="CtiDigital_InventoryImport"
+             resource="CtiDigital_InventoryImport::inventory_import"
+             translate="title" />
+        <add id="CtiDigital_InventoryImport::cti_digital_inventory_import_log"
+             sortOrder="100" title="Import Log"
+             module="CtiDigital_InventoryImport"
+             parent="CtiDigital_InventoryImport::cti_digital_inventory_import"
+             resource="CtiDigital_InventoryImport::inventory_import"
+             translate="title"
+             action="ctidigitalimport/importlog/index"/>
+    </menu>
+</config>
