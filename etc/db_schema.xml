@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cti_digital_inventory_import_log" resource="default" engine="innodb" comment="Import Log Table">
+        <column xsi:type="int" name="log_id" padding="10" unsigned="true" nullable="true" identity="true"/>
+        <column xsi:type="varchar" name="import_status" nullable="false" length="15" default="false"
+                comment="Import Operation Status"/>
+        <column xsi:type="text" name="import_data" nullable="true" comment="Imported Data"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" on_update="false" default="CURRENT_TIMESTAMP"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+        <index referenceId="CTI_DIGITAL_INVENTORY_IMPORT_LOG_LOG_ID" indexType="btree">
+            <column name="log_id"/>
+        </index>
+        <index referenceId="CTI_DIGITAL_INVENTORY_IMPORT_LOG_STATUS" indexType="btree">
+            <column name="import_status"/>
+        </index>
+    </table>
+</schema>

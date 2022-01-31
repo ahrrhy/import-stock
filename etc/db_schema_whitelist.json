@@ -1,0 +1,16 @@
+{
+  "cti_digital_inventory_import_log": {
+    "column": {
+      "log_id": true,
+      "import_status": true,
+      "import_data": true,
+      "created_at": true
+    },
+    "index": {
+      "CTI_DIGITAL_INVENTORY_IMPORT_LOG_LOG_ID": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
