@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">cti_digital_import_log_listing.cti_digital_import_log_listing_data_source</item>
+            <item name="deps" xsi:type="string">cti_digital_import_log_listing.cti_digital_import_log_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>cti_digital_import_log_listing_columns</spinner>
+        <deps>
+            <dep>cti_digital_import_log_listing.cti_digital_import_log_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="cti_digital_import_log_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">log_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>CtiDigital_InventoryImport::inventory_import_management</aclResource>
+        <dataProvider class="CtiDigital\InventoryImport\Ui\DataProvider\ImportLogDataProvider"
+                      name="cti_digital_import_log_listing_data_source">
+            <settings>
+                <requestFieldName>log_id</requestFieldName>
+                <primaryFieldName>log_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="cti_digital_import_log_listing_columns">
+        <column name="log_id">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="import_status">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Import Status</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="import_data">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Import Data</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">Created At</label>
+                <sorting>desc</sorting>
+            </settings>
+        </column>
+        <actionsColumn name="actions"
+                       class="CtiDigital\InventoryImport\Ui\Component\Listing\Column\ImportLogBlockActions">
+            <settings>
+                <indexField>log_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
