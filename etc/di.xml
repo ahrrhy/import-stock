@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="CtiDigital\InventoryImport\Api\Data\ImportLogInterface"
+                type="CtiDigital\InventoryImport\Model\Data\ImportLogData"/>
+    <preference for="CtiDigital\InventoryImport\Api\ImportLogRepositoryInterface"
+                type="CtiDigital\InventoryImport\Model\ImportLogRepository"/>
+    <preference for="CtiDigital\InventoryImport\Api\Commands\ImportLog\DeleteByIdCommandInterface"
+                type="CtiDigital\InventoryImport\Command\ImportLog\DeleteByIdCommand"/>
+    <preference for="CtiDigital\InventoryImport\Api\Commands\ImportLog\GetByIdCommandInterface"
+                type="CtiDigital\InventoryImport\Command\ImportLog\GetByIdCommand"/>
+    <preference for="CtiDigital\InventoryImport\Api\Commands\ImportLog\SaveCommandInterface"
+                type="CtiDigital\InventoryImport\Command\ImportLog\SaveCommand"/>
+</config>
