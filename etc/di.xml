@@ -11,4 +11,6 @@
                 type="CtiDigital\InventoryImport\Command\ImportLog\GetByIdCommand"/>
     <preference for="CtiDigital\InventoryImport\Api\Commands\ImportLog\SaveCommandInterface"
                 type="CtiDigital\InventoryImport\Command\ImportLog\SaveCommand"/>
+    <preference for="CtiDigital\InventoryImport\Api\Config\ConfigProviderInterface"
+                type="CtiDigital\InventoryImport\Model\Config\ConfigProvider"/>
 </config>

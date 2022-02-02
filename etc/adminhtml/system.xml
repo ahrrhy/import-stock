@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="cti_digital" translate="label" sortOrder="1000">
+            <label>CtiDigital Inventory Import</label>
+        </tab>
+        <section id="cti_digital" translate="label" type="text" sortOrder="100"
+                 showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>General</label>
+            <tab>cti_digital</tab>
+            <resource>CtiDigital_InventoryImport::inventory_import</resource>
+            <group id="import" translate="label" type="text" sortOrder="10"
+                   showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+                <field id="enable" translate="label" type="select" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Inventory Import</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="batch_size" translate="label" type="text" sortOrder="10"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Batch Size</label>
+                    <comment>The size of batch which will be written to db per operation</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
