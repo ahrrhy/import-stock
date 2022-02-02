@@ -13,4 +13,6 @@
                 type="CtiDigital\InventoryImport\Command\ImportLog\SaveCommand"/>
     <preference for="CtiDigital\InventoryImport\Api\Config\ConfigProviderInterface"
                 type="CtiDigital\InventoryImport\Model\Config\ConfigProvider"/>
+    <preference for="CtiDigital\InventoryImport\Api\Import\FileProcessorInterface"
+                type="CtiDigital\InventoryImport\Model\Import\FileProcessor"/>
 </config>
