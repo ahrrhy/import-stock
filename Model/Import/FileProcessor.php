@@ -57,6 +57,15 @@ class FileProcessor implements FileProcessorInterface
      */
     private $timeZone;
 
+    /**
+     * FileProcessor constructor.
+     * @param Csv $csv
+     * @param File $ioFile
+     * @param LoggerInterface $logger
+     * @param TimezoneInterface $timeZone
+     * @param DirectoryList $directoryList
+     * @param ConfigProviderInterface $configProvider
+     */
     public function __construct(
         Csv $csv,
         File $ioFile,

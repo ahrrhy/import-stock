@@ -67,10 +67,10 @@ interface ConfigProviderInterface
      *
      * @param string $scope
      * @param null $storeId
-     * @return string
+     * @return int
      */
     public function getImportBatchSize(
         string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $storeId = null
-    ): string;
+    ): int;
 }

@@ -88,8 +88,8 @@ class ConfigProvider implements ConfigProviderInterface
     public function getImportBatchSize(
         string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $storeId = null
-    ): string {
-        return $this->scopeConfig->getValue(
+    ): int {
+        return (int)$this->scopeConfig->getValue(
             self::IMPORT_BATCH_SIZE_PATH,
             $scope,
             $storeId
