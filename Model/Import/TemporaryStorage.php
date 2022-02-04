@@ -74,7 +74,7 @@ class TemporaryStorage implements TemporaryStorageInterface
                 $connection->commit();
             }
         } catch (Zend_Db_Exception $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->debug($exception->getMessage());
             $connection->rollBack();
         }
 
@@ -114,7 +114,7 @@ class TemporaryStorage implements TemporaryStorageInterface
                 ['entity_id' => 'product_id']
             )->query()->fetch(\PDO::FETCH_ASSOC);
         } catch (Zend_Db_Exception $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->debug($exception->getMessage());
         }
 
         return $data;
@@ -163,7 +163,7 @@ class TemporaryStorage implements TemporaryStorageInterface
 
             return $table;
         } catch (Zend_Db_Exception $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->debug($exception->getMessage());
 
             throw new TableNotFoundException($exception->getMessage());
         }

@@ -93,7 +93,7 @@ class FileProcessor implements FileProcessorInterface
                 self::DIRECTORY_PERMISSION
             );
         } catch (LocalizedException $exception) {
-            $this->logger->critical(__('Could not get imports directory: %1', $exception->getMessage()));
+            $this->logger->debug(__('Could not get imports directory: %1', $exception->getMessage()));
 
             throw new NotFoundException(__('Could not get imports directory: %1', $exception->getMessage()));
         }
@@ -122,11 +122,11 @@ class FileProcessor implements FileProcessorInterface
                 );
             }
         } catch (NotFoundException $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->debug($exception->getMessage());
 
             throw new NotFoundException(__($exception->getMessage()));
         } catch (FileSystemException $exception) {
-            $this->logger->critical(__('Could not get imports directory: %1', $exception->getMessage()));
+            $this->logger->debug(__('Could not get imports directory: %1', $exception->getMessage()));
 
             throw new NotFoundException(__('Could not get imports directory: %1', $exception->getMessage()));
         }
@@ -151,7 +151,7 @@ class FileProcessor implements FileProcessorInterface
 
             return $this->ioFile->mv($srcFilePath, $archivedFilePath);
         } catch (FileSystemException $exception) {
-            $this->logger->critical(__('Could not get imports directory: %1', $exception->getMessage()));
+            $this->logger->debug(__('Could not get imports directory: %1', $exception->getMessage()));
 
             throw new NotFoundException(__('Could not get imports directory: %1', $exception->getMessage()));
         }
@@ -173,7 +173,7 @@ class FileProcessor implements FileProcessorInterface
 
             return $this->ioFile->fileExists($filePath, true);
         } catch (FileSystemException $exception) {
-            $this->logger->critical(__('Could not get imports directory: %1', $exception->getMessage()));
+            $this->logger->debug(__('Could not get imports directory: %1', $exception->getMessage()));
 
             throw new NotFoundException(__('Could not get imports directory: %1', $exception->getMessage()));
         }
