@@ -19,6 +19,8 @@
                 type="CtiDigital\InventoryImport\Model\Import\ProductQtyProcessor"/>
     <preference for="CtiDigital\InventoryImport\Api\Import\ImportProcessorInterface"
                 type="CtiDigital\InventoryImport\Model\Import\ImportProcessor"/>
+    <preference for="CtiDigital\InventoryImport\Api\Import\TemporaryStorageInterface"
+                type="CtiDigital\InventoryImport\Model\Import\TemporaryStorage"/>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

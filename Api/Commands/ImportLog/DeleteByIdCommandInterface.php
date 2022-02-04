@@ -9,7 +9,7 @@ interface DeleteByIdCommandInterface
     /**
      * Deleting ImportLogId
      *
-     * @param $importLogId
+     * @param int $importLogId
      */
-    public function execute($importLogId): void;
+    public function execute(int $importLogId): void;
 }
