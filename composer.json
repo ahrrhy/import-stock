@@ -9,7 +9,7 @@
     "magento/module-config": "101.2.*"
   },
   "license": [
-    "Proprietary"
+      "OSL-3.0"
   ],
   "autoload": {
     "files": [
