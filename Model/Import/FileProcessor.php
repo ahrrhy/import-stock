@@ -8,6 +8,7 @@ namespace CtiDigital\InventoryImport\Model\Import;
 
 use CtiDigital\InventoryImport\Api\Config\ConfigProviderInterface;
 use CtiDigital\InventoryImport\Api\Import\FileProcessorInterface;
+use CtiDigital\InventoryImport\Api\Import\TemporaryStorageInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
@@ -17,9 +18,6 @@ use Magento\Framework\Filesystem\Io\File;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
-/**
- * Class FileProcessor
- */
 class FileProcessor implements FileProcessorInterface
 {
     /**
@@ -117,7 +115,11 @@ class FileProcessor implements FileProcessorInterface
                 );
             }
 
-            return $data;
+            return $this->mapCsvColumn(
+                $data,
+                self::FILE_QTY_COLUMN,
+                TemporaryStorageInterface::QTY_COLUMN
+            );
         } catch (NotFoundException $exception) {
             $this->logger->critical($exception->getMessage());
         } catch (FileSystemException $exception) {
@@ -185,5 +187,32 @@ class FileProcessor implements FileProcessorInterface
         }
 
         return $this->filePaths[$directoryName];
+    }
+
+    /**
+     * Change column names from file
+     *
+     * @param array $csvData
+     * @param string $oldColumn
+     * @param string $newColumn
+     * @return array
+     */
+    private function mapCsvColumn(
+        array $csvData,
+        string $oldColumn,
+        string $newColumn
+    ): array {
+        $newArray = [];
+
+        foreach ($csvData as $row) {
+            if (isset($row[$oldColumn])) {
+                $newRow[] = $row;
+                $newRow[$newColumn] = $row[$oldColumn];
+                unset($newRow[$oldColumn]);
+                $newArray[] = $newRow;
+            }
+        }
+
+        return $newArray;
     }
 }

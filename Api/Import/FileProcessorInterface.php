@@ -9,6 +9,8 @@ namespace CtiDigital\InventoryImport\Api\Import;
  */
 interface FileProcessorInterface
 {
+    public const FILE_QTY_COLUMN = 'stock';
+
     /**
      * New directory permission
      */

@@ -51,9 +51,9 @@ class TemporaryStorage implements TemporaryStorageInterface
     public function writeToTemporaryTable(string $tableName, array $importData): int
     {
         $columns = array_keys($importData[0]);
-        $temporaryTable = $this->createTemporaryTable($tableName, $columns);
+        $temporaryTable = $this->createTemporaryTable($tableName);
         $connection = $this->resource->getConnection();
-        $batchSize = (int)$this->configProvider->getImportBatchSize();
+        $batchSize = $this->configProvider->getImportBatchSize();
         $insertedRows = 0;
         $iterationCount = (int)ceil(count($importData) / $batchSize);
 
@@ -95,6 +95,8 @@ class TemporaryStorage implements TemporaryStorageInterface
     }
 
     /**
+     * Return data as ['product_id', 'sku', 'qty'] array
+     *
      * @inheritDoc
      */
     public function selectFromTemporaryTable(string $tableName): array
@@ -104,7 +106,12 @@ class TemporaryStorage implements TemporaryStorageInterface
 
         try {
             $data = $connection->select()->from(
-                $this->resource->getTableName($tableName)
+                $this->resource->getTableName($tableName),
+                ['sku', 'qty']
+            )->joinInner(
+                ['products' => $this->resource->getTableName('catalog_product_entity')],
+                'products.sku = main_table.sku',
+                ['entity_id' => 'product_id']
             )->query()->fetch(\PDO::FETCH_ASSOC);
         } catch (Zend_Db_Exception $exception) {
             $this->logger->critical($exception->getMessage());
@@ -115,13 +122,11 @@ class TemporaryStorage implements TemporaryStorageInterface
 
     /**
      * @param string $tableName
-     * @param array $columns
      * @return Table
      * @throws TableNotFoundException
      */
     private function createTemporaryTable(
-        string $tableName,
-        array $columns
+        string $tableName
     ): Table {
         $connection = $this->resource->getConnection();
         $nemTableName = $this->resource->getTableName($tableName);
@@ -140,14 +145,14 @@ class TemporaryStorage implements TemporaryStorageInterface
                 'Import input id'
             );
             $table->addColumn(
-                $columns[0],
+                self::SKU_COLUMN,
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'Product Sku'
             );
             $table->addColumn(
-                $columns[0],
+                self::QTY_COLUMN,
                 Table::TYPE_INTEGER,
                 10,
                 ['unsigned' => true, 'nullable' => false],

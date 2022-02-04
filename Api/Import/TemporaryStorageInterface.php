@@ -13,6 +13,8 @@ interface TemporaryStorageInterface
      * Temporary table data
      */
     public const TEMPORARY_TABLE_NAME = 'cti_digital_inventory_import_temporary';
+    public const SKU_COLUMN = 'sku';
+    public const QTY_COLUMN = 'qty';
 
     /**
      * Create Temporary Table and write import data
