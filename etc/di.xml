@@ -23,9 +23,34 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="ctidigital_inventoryimport_inventory_import_command" xsi:type="object">
-                    \CtiDigital\InventoryImport\Console\Command\InventoryImportCommand
+                    CtiDigital\InventoryImport\Console\Command\InventoryImportCommand
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="InventoryImportLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">CtiDigital\InventoryImport\Logger\Handler\InventoryImportLogger</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="CtiDigital\InventoryImport\Api\Import\FileProcessorInterface"
+          xsi:type="object">
+        <arguments>
+            <argument name="logger" xsi:type="object">InventoryImportLogger</argument>
+        </arguments>
+    </type>
+    <type name="CtiDigital\InventoryImport\Api\Import\ImportProcessorInterface"
+          xsi:type="object">
+        <arguments>
+            <argument name="logger" xsi:type="object">InventoryImportLogger</argument>
+        </arguments>
+    </type>
+    <type name="CtiDigital\InventoryImport\Api\Import\TemporaryStorageInterface"
+          xsi:type="object">
+        <arguments>
+            <argument name="logger" xsi:type="object">InventoryImportLogger</argument>
         </arguments>
     </type>
 </config>
