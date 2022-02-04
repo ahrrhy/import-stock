@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="cti_digital_inventory_import">
+        <job name="ctidigital_inventoryimport_clean_table_cronjob"
+             instance="CtiDigital\InventoryImport\Cron\CleanTableCronjob" method="execute">
+            <config_path>cti_digital/import/cron</config_path>
+        </job>
+    </group>
+</config>
