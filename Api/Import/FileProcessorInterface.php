@@ -14,11 +14,6 @@ interface FileProcessorInterface
     public const FILE_QTY_COLUMN = 'stock';
 
     /**
-     * New directory permission
-     */
-    public const DIRECTORY_PERMISSION = '0775';
-
-    /**
      * Get data from imported file
      * @throws NotFoundException
      *
@@ -44,9 +39,9 @@ interface FileProcessorInterface
     /**
      * Check if file is present
      *
-     * @param string $fileName
      * @param string $directoryName
+     * @param string $fileName
      * @return bool
      */
-    public function isImportFileExists(string $fileName, string $directoryName): bool;
+    public function isImportFileExists(string $directoryName, string $fileName): bool;
 }

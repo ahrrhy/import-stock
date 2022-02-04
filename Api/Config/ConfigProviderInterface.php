@@ -8,7 +8,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 interface ConfigProviderInterface
 {
-    public const MODULE_ENABLED_PATH = 'cti_digital/import/enabled';
+    public const MODULE_ENABLED_PATH = 'cti_digital/import/enable';
     public const FILE_DIRECTORY_PATH = 'cti_digital/import/directory';
     public const PROCESSED_FILE_DIRECTORY_PATH = 'cti_digital/import/processed_directory';
     public const FILE_NAME_PATH = 'cti_digital/import/file_name';

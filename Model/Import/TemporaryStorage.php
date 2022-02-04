@@ -50,7 +50,6 @@ class TemporaryStorage implements TemporaryStorageInterface
      */
     public function writeToTemporaryTable(string $tableName, array $importData): int
     {
-        $columns = array_keys($importData[0]);
         $temporaryTable = $this->createTemporaryTable($tableName);
         $connection = $this->resource->getConnection();
         $batchSize = $this->configProvider->getImportBatchSize();
@@ -66,9 +65,8 @@ class TemporaryStorage implements TemporaryStorageInterface
                     $batchSize,
                     true
                 );
-                $insertedRows = $this->resource->getConnection()->insertArray(
+                $insertedRows += $this->resource->getConnection()->insertMultiple(
                     $temporaryTable->getName(),
-                    $columns,
                     $bulkData
                 );
                 $connection->commit();
@@ -89,9 +87,7 @@ class TemporaryStorage implements TemporaryStorageInterface
         $resourceTableName = $this->resource->getTableName($tableName);
         $connection = $this->resource->getConnection();
 
-        if ($connection->isTableExists($tableName)) {
-            $connection->dropTable($resourceTableName);
-        }
+        $connection->dropTemporaryTable($resourceTableName);
     }
 
     /**
@@ -110,9 +106,9 @@ class TemporaryStorage implements TemporaryStorageInterface
                 ['sku', 'qty']
             )->joinInner(
                 ['products' => $this->resource->getTableName('catalog_product_entity')],
-                'products.sku = main_table.sku',
-                ['entity_id' => 'product_id']
-            )->query()->fetch(\PDO::FETCH_ASSOC);
+                'products.sku =' . $tableName . '.sku',
+                ['entity_id as product_id']
+            )->query()->fetchAll(\PDO::FETCH_ASSOC);
         } catch (Zend_Db_Exception $exception) {
             $this->logger->debug($exception->getMessage());
         }
@@ -138,17 +134,10 @@ class TemporaryStorage implements TemporaryStorageInterface
         try {
             $table = $connection->newTable($nemTableName);
             $table->addColumn(
-                'input_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true],
-                'Import input id'
-            );
-            $table->addColumn(
                 self::SKU_COLUMN,
                 Table::TYPE_TEXT,
                 255,
-                ['nullable' => false],
+                ['nullable' => false, 'primary' => true],
                 'Product Sku'
             );
             $table->addColumn(
@@ -158,7 +147,7 @@ class TemporaryStorage implements TemporaryStorageInterface
                 ['unsigned' => true, 'nullable' => false],
                 'Product Qty'
             );
-            $table->setOption('type', 'memory');
+            $table->setOption('type', 'innodb');
             $connection->createTemporaryTable($table);
 
             return $table;

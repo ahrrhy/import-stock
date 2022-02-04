@@ -17,6 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Io\File;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class FileProcessor implements FileProcessorInterface
 {
@@ -89,8 +90,8 @@ class FileProcessor implements FileProcessorInterface
     {
         try {
             return $this->ioFile->checkAndCreateFolder(
-                $this->directoryList->getPath(DirectoryList::VAR_DIR) . $directoryName,
-                self::DIRECTORY_PERMISSION
+                $this->directoryList->getPath(DirectoryList::VAR_DIR)
+                . DIRECTORY_SEPARATOR . $directoryName
             );
         } catch (LocalizedException $exception) {
             $this->logger->debug(__('Could not get imports directory: %1', $exception->getMessage()));
@@ -110,14 +111,15 @@ class FileProcessor implements FileProcessorInterface
         $data = [];
 
         try {
-            if ($this->isImportFileExists($importFileName, $importDirName)) {
-                $data = $this->csv->getDataPairs(
+            if ($this->isImportFileExists($importDirName, $importFileName)) {
+                $data = $this->csv->getData(
                     $this->getFilePath($importDirName, $importFileName)
                 );
+                unset($data[0]);
 
                 return $this->mapCsvColumn(
                     $data,
-                    self::FILE_QTY_COLUMN,
+                    TemporaryStorageInterface::SKU_COLUMN,
                     TemporaryStorageInterface::QTY_COLUMN
                 );
             }
@@ -148,6 +150,7 @@ class FileProcessor implements FileProcessorInterface
         try {
             $srcFilePath = $this->getFilePath($importDirName, $importFileName);
             $archivedFilePath = $this->getFilePath($archiveDirName, $archiveFileName);
+            $this->checkDirectory($archiveDirName);
 
             return $this->ioFile->mv($srcFilePath, $archivedFilePath);
         } catch (FileSystemException $exception) {
@@ -160,12 +163,12 @@ class FileProcessor implements FileProcessorInterface
     /**
      * Check if imported file existed
      *
-     * @param string $fileName
      * @param string $directoryName
+     * @param string $fileName
      * @return bool
      * @throws NotFoundException
      */
-    public function isImportFileExists(string $fileName, string $directoryName): bool
+    public function isImportFileExists(string $directoryName, string $fileName): bool
     {
         try {
             $this->checkDirectory($directoryName);
@@ -189,7 +192,7 @@ class FileProcessor implements FileProcessorInterface
     {
         if (!isset($this->filePaths[$directoryName])) {
             $this->filePaths[$directoryName] = $this->directoryList->getPath(DirectoryList::VAR_DIR)
-            . $directoryName . DIRECTORY_SEPARATOR . $fileName;
+                . DIRECTORY_SEPARATOR . $directoryName . DIRECTORY_SEPARATOR . $fileName;
         }
 
         return $this->filePaths[$directoryName];
@@ -199,22 +202,21 @@ class FileProcessor implements FileProcessorInterface
      * Change column names from file
      *
      * @param array $csvData
-     * @param string $oldColumn
-     * @param string $newColumn
+     * @param string $firstColumn
+     * @param string $secondColumn
      * @return array
      */
     private function mapCsvColumn(
         array $csvData,
-        string $oldColumn,
-        string $newColumn
+        string $firstColumn,
+        string $secondColumn
     ): array {
         $newArray = [];
 
         foreach ($csvData as $row) {
-            if (isset($row[$oldColumn])) {
-                $newRow[] = $row;
-                $newRow[$newColumn] = $row[$oldColumn];
-                unset($newRow[$oldColumn]);
+            if (isset($row[0], $row[1])) {
+                $newRow[$firstColumn] = $row[0];
+                $newRow[$secondColumn] = $row[1];
                 $newArray[] = $newRow;
             }
         }

@@ -10,9 +10,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Inventory Import Command
- */
 class InventoryImportCommand extends Command
 {
     public const COMMAND_NAME = 'cti-digital:inventory:import';

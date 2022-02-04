@@ -96,14 +96,15 @@ class ImportProcessor implements ImportProcessorInterface
                     )
                 );
                 $this->logger->debug(__('Updated products qty: %1', $processedQty));
+                $this->temporaryStorage->dropTemporaryTable(
+                    TemporaryStorageInterface::TEMPORARY_TABLE_NAME
+                );
                 $this->logToTable(
                     ImportLogInterface::STATUS_PROCESSED,
                     sprintf('Processed %d products', $processedQty)
                 );
 
-                if ($processedQty) {
-                    $this->fileProcessor->processFile();
-                }
+                $this->fileProcessor->processFile();
             }
         } catch (NotFoundException $exception) {
             $this->logToTable(ImportLogInterface::STATUS_FAILED);
