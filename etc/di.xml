@@ -17,11 +17,13 @@
                 type="CtiDigital\InventoryImport\Model\Import\FileProcessor"/>
     <preference for="CtiDigital\InventoryImport\Api\Import\ProductQtyProcessorInterface"
                 type="CtiDigital\InventoryImport\Model\Import\ProductQtyProcessor"/>
+    <preference for="CtiDigital\InventoryImport\Api\Import\ImportProcessorInterface"
+                type="CtiDigital\InventoryImport\Model\Import\ImportProcessor"/>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="ctidigital_inventoryimport_inventory_import_command" xsi:type="object">
-                    CtiDigital\InventoryImport\Console\Command\InventoryImportCommand
+                    \CtiDigital\InventoryImport\Console\Command\InventoryImportCommand
                 </item>
             </argument>
         </arguments>
