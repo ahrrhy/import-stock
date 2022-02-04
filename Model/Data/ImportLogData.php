@@ -50,7 +50,7 @@ class ImportLogData extends DataObject implements ImportLogInterface
      */
     public function getImportData(): string
     {
-        return $this->getData(self::IMPORT_DATA);
+        return $this->getData(self::IMPORT_DATA) ?? '';
     }
 
     /**
