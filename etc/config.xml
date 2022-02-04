@@ -5,8 +5,8 @@
             <import>
                 <enable>0</enable>
                 <batch_size>100</batch_size>
-                <directory>import</directory>
-                <processed_directory>archive</processed_directory>
+                <directory>inventory/import</directory>
+                <processed_directory>inventory/import/archive</processed_directory>
                 <file_name>stock.csv</file_name>
             </import>
         </cti_digital>
