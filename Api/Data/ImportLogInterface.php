@@ -20,6 +20,13 @@ interface ImportLogInterface extends ExtensibleDataInterface
     const CREATED_AT = 'created_at';
 
     /**
+     * Log Statuses
+     */
+    const STATUS_EMPTY = 'empty';
+    const STATUS_PROCESSED = 'processed';
+    const STATUS_FAILED = 'failed';
+
+    /**
      * Getter for LogId.
      *
      * @return int|null

@@ -100,7 +100,8 @@ class FileProcessor implements FileProcessorInterface
     }
 
     /**
-     * @inheriDoc
+     * @return array
+     * @throws NotFoundException
      */
     public function readData(): array
     {
@@ -113,17 +114,21 @@ class FileProcessor implements FileProcessorInterface
                 $data = $this->csv->getDataPairs(
                     $this->getFilePath($importDirName, $importFileName)
                 );
-            }
 
-            return $this->mapCsvColumn(
-                $data,
-                self::FILE_QTY_COLUMN,
-                TemporaryStorageInterface::QTY_COLUMN
-            );
+                return $this->mapCsvColumn(
+                    $data,
+                    self::FILE_QTY_COLUMN,
+                    TemporaryStorageInterface::QTY_COLUMN
+                );
+            }
         } catch (NotFoundException $exception) {
             $this->logger->critical($exception->getMessage());
+
+            throw new NotFoundException(__($exception->getMessage()));
         } catch (FileSystemException $exception) {
             $this->logger->critical(__('Could not get imports directory: %1', $exception->getMessage()));
+
+            throw new NotFoundException(__('Could not get imports directory: %1', $exception->getMessage()));
         }
 
         return $data;
@@ -160,9 +165,10 @@ class FileProcessor implements FileProcessorInterface
      * @return bool
      * @throws NotFoundException
      */
-    private function isImportFileExists(string $fileName, string $directoryName): bool
+    public function isImportFileExists(string $fileName, string $directoryName): bool
     {
         try {
+            $this->checkDirectory($directoryName);
             $filePath = $this->getFilePath($directoryName, $fileName);
 
             return $this->ioFile->fileExists($filePath, true);

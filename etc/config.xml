@@ -7,7 +7,7 @@
                 <batch_size>100</batch_size>
                 <directory>import</directory>
                 <processed_directory>archive</processed_directory>
-                <file_name>import.csv</file_name>
+                <file_name>stock.csv</file_name>
             </import>
         </cti_digital>
     </default>

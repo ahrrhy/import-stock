@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace CtiDigital\InventoryImport\Model\Import;
 
+use CtiDigital\InventoryImport\Api\Config\ConfigProviderInterface;
 use CtiDigital\InventoryImport\Api\Import\ProductQtyProcessorInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 
 class ProductQtyProcessor implements ProductQtyProcessorInterface
 {
@@ -14,58 +16,66 @@ class ProductQtyProcessor implements ProductQtyProcessorInterface
      */
     private $resource;
 
+    /**
+     * @var ConfigProviderInterface
+     */
+    private $configProvider;
+
+    /**
+     * ProductQtyProcessor constructor.
+     * @param ResourceConnection $resource
+     * @param ConfigProviderInterface $configProvider
+     */
     public function __construct(
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        ConfigProviderInterface $configProvider
     ) {
         $this->resource = $resource;
+        $this->configProvider = $configProvider;
     }
 
     /**
-     * @ingeritdoc
+     * @param array $importedData
+     * @return int
+     * @throws LocalizedException
      */
     public function processQty(array $importedData): int
     {
         $connection = $this->resource->getConnection();
-        $productIds = $this->separateArrays($importedData, 'product_id');
-        $productsQty = $this->separateArrays(
-            $importedData,
-            'qty',
-            true
-        );
+        $batchSize = $this->configProvider->getImportBatchSize();
+        $updatedQty = 0;
+        $iterationCount = (int)ceil(count($importedData) / $batchSize);
 
-        return $connection->update(
-            $this->resource->getTableName('cataloginventory_stock_item'),
-            $productsQty,
-            [
-                'product_id' . ' in (?)' => $productIds,
-                'website_id = ?' => 0,
-            ]
-        );
-    }
+        try {
+            for ($i = 0; $i < $iterationCount; $i++) {
+                $connection->beginTransaction();
+                $bulkData = array_slice(
+                    $importedData,
+                    $i * $batchSize,
+                    $batchSize,
+                    true
+                );
 
-    /**
-     * @param array $incomingArray
-     * @param string $arrayColumn
-     * @param bool $asAssoc
-     * @return array
-     */
-    private function separateArrays(
-        array $incomingArray,
-        string $arrayColumn,
-        bool $asAssoc = false
-    ): array {
-        $newArray = [];
-
-        foreach ($incomingArray as $child) {
-            if (isset($child[$arrayColumn])) {
-                if ($asAssoc) {
-                    $newArray[][$arrayColumn] = $child[$arrayColumn];
-                } else {
-                    $newArray[] = $child[$arrayColumn];
+                foreach ($bulkData as $row) {
+                    $updatedQty += $connection->update(
+                        $this->resource->getTableName('cataloginventory_stock_item'),
+                        ['qty' => $row['qty']],
+                        [
+                            'product_id' . ' in (?)' => $row['product_id'],
+                            'website_id = ?' => 0,
+                            'qty <> ?' => $row['qty']
+                        ]
+                    );
                 }
+
+                $connection->commit();
             }
+        } catch (\Exception $exception) {
+            $connection->rollBack();
+
+            throw new LocalizedException(__('Could not update qty: %1', $exception->getMessage()));
         }
 
-        return $newArray;
+        return $updatedQty;
     }
 }
