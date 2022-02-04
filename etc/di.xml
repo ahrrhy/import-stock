@@ -15,4 +15,6 @@
                 type="CtiDigital\InventoryImport\Model\Config\ConfigProvider"/>
     <preference for="CtiDigital\InventoryImport\Api\Import\FileProcessorInterface"
                 type="CtiDigital\InventoryImport\Model\Import\FileProcessor"/>
+    <preference for="CtiDigital\InventoryImport\Api\Import\ProductQtyProcessorInterface"
+                type="CtiDigital\InventoryImport\Model\Import\ProductQtyProcessor"/>
 </config>
